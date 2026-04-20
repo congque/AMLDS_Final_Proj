@@ -1,0 +1,6 @@
+data/data_processed/cshsi_Loukia.npz filter=lfs diff=lfs merge=lfs -text
+data/data_processed/glove_6b_300d.npz filter=lfs diff=lfs merge=lfs -text
+data/data_processed/sift1m.npz filter=lfs diff=lfs merge=lfs -text
+data/data_processed/mnist.npz filter=lfs diff=lfs merge=lfs -text
+data/data_processed/cshsi_paviaC.npz filter=lfs diff=lfs merge=lfs -text
+data/data_processed/cshsi_Dioni.npz filter=lfs diff=lfs merge=lfs -text
