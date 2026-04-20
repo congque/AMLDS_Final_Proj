@@ -179,10 +179,11 @@ def load_glove_entries(path: Path, max_vectors: Optional[int] = None) -> tuple[n
             stripped = line.strip()
             if not stripped:
                 continue
-            try:
-                token, values = stripped.split(" ", 1)
-            except ValueError as exc:
-                raise ValueError(f"malformed GloVe line {line_number} in {path}") from exc
+            split_at = stripped.find(" ")
+            if split_at <= 0:
+                raise ValueError(f"malformed GloVe line {line_number} in {path}")
+            token = stripped[:split_at]
+            values = stripped[split_at + 1 :]
             vector = np.fromstring(values, sep=" ", dtype=np.float32)
             if vector.size == 0:
                 raise ValueError(f"empty vector at line {line_number} in {path}")
@@ -191,11 +192,6 @@ def load_glove_entries(path: Path, max_vectors: Optional[int] = None) -> tuple[n
     if not vectors:
         raise ValueError(f"no vectors loaded from {path}")
     return np.asarray(tokens), np.vstack(vectors)
-
-
-def load_glove_vectors(path: Path, max_vectors: Optional[int] = None) -> np.ndarray:
-    _, vectors = load_glove_entries(path, max_vectors=max_vectors)
-    return vectors
 
 
 def cshsi_root(data_root: Path) -> Path:
@@ -245,6 +241,7 @@ def _load_mat_array(path: Path, key: str) -> np.ndarray:
             raise KeyError(f"key {key} not found in {path}")
         return np.asarray(obj[key])
     except NotImplementedError:
+        # Houston data is stored as MATLAB v7.3 / HDF5, so scipy falls back here.
         with h5py.File(path, "r") as handle:
             if key not in handle:
                 raise KeyError(f"key {key} not found in {path}")
@@ -319,14 +316,6 @@ def load_mars_band_vectors(
 
 def mars_root(data_root: Path) -> Path:
     return data_root / "mars" / "images_15d"
-
-
-def load_similarity_npz_vectors(path: Path, max_samples: Optional[int] = None) -> np.ndarray:
-    with np.load(path) as data:
-        vectors = np.asarray(data["vectors"], dtype=np.float32)
-    if max_samples is not None:
-        vectors = vectors[:max_samples]
-    return vectors
 
 
 def parse_mars_tile_name(name: str) -> tuple[int, int]:
@@ -481,11 +470,6 @@ def processed_data_root(project_root: Path) -> Path:
 def load_processed_manifest(processed_root: Path) -> dict:
     manifest_path = processed_root / "manifest.json"
     return json.loads(manifest_path.read_text(encoding="utf-8"))
-
-
-def list_processed_datasets(processed_root: Path) -> list[str]:
-    manifest = load_processed_manifest(processed_root)
-    return [item["dataset_name"] for item in manifest["datasets"]]
 
 
 def processed_dataset_path(processed_root: Path, dataset_name: str) -> Path:

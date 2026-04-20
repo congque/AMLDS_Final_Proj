@@ -49,6 +49,14 @@ def _row_linear_oracle(gradient: np.ndarray, count: int) -> np.ndarray:
     return _axis_binary_mask_from_bottomk(gradient, count=count, axis=1)
 
 
+def _relative_frobenius_error(reference: np.ndarray, estimate: np.ndarray, eps: float = 1e-8) -> float:
+    reference = np.asarray(reference, dtype=np.float32)
+    estimate = np.asarray(estimate, dtype=np.float32)
+    numerator = np.linalg.norm(reference - estimate)
+    denominator = max(float(np.linalg.norm(reference)), eps)
+    return float(numerator / denominator)
+
+
 def solve_optimal_sparse_codes(
     x: np.ndarray,
     output_dim: int,
@@ -85,6 +93,41 @@ def solve_optimal_sparse_codes(
     return _column_topk_binary(y, hash_length)
 
 
+def estimate_mahalanobis_statistics(
+    target_codes: np.ndarray,
+    operator_metric: str,
+    covariance_reg: float,
+) -> tuple[np.ndarray | None, np.ndarray | None]:
+    """Estimate the covariance / precision used in the proposal's W-step.
+
+    We keep the paper's first stage intact and estimate the covariance in the
+    lifted code space from Y*. This makes the proposal change explicit:
+    Euclidean W-step  ->  Mahalanobis-weighted W-step.
+    """
+
+    if operator_metric == "euclidean":
+        return None, None
+
+    centered_codes = target_codes - target_codes.mean(axis=1, keepdims=True)
+    num_samples = max(1, centered_codes.shape[1] - 1)
+    covariance = (centered_codes @ centered_codes.T) / float(num_samples)
+    covariance = covariance.astype(np.float32, copy=False)
+    identity = np.eye(covariance.shape[0], dtype=np.float32)
+    covariance = covariance + np.float32(covariance_reg) * identity
+
+    if operator_metric == "mahalanobis_diag":
+        diagonal = np.maximum(np.diag(covariance), np.float32(covariance_reg))
+        covariance = np.diag(diagonal).astype(np.float32, copy=False)
+        precision = np.diag(1.0 / diagonal).astype(np.float32, copy=False)
+        return covariance, precision
+
+    if operator_metric == "mahalanobis_full":
+        precision = np.linalg.pinv(covariance).astype(np.float32, copy=False)
+        return covariance, precision
+
+    raise ValueError(f"unsupported operator metric: {operator_metric}")
+
+
 def learn_sparse_lifting_operator(
     x: np.ndarray,
     target_codes: np.ndarray,
@@ -92,7 +135,9 @@ def learn_sparse_lifting_operator(
     row_active: int,
     num_iters: int,
     rng: np.random.Generator,
-) -> np.ndarray:
+    operator_metric: str = "euclidean",
+    covariance_reg: float = 1e-3,
+) -> tuple[np.ndarray, np.ndarray | None, np.ndarray | None]:
     """Paper step 2: learn a sparse lifting operator W* such that WX ~= Y*.
 
     Shapes:
@@ -102,6 +147,10 @@ def learn_sparse_lifting_operator(
 
     The paper solves a sparse optimization for W. We keep the same two-stage
     pipeline and use a lightweight Frank-Wolfe-style row-sparse update.
+
+    Proposal extension:
+    - original paper-aligned reproduction: Euclidean residual
+    - our proposal: Mahalanobis-weighted residual in the lifted code space
     """
 
     input_dim = x.shape[0]
@@ -110,15 +159,25 @@ def learn_sparse_lifting_operator(
         active = rng.choice(input_dim, size=row_active, replace=False)
         w[row, active] = 1.0
 
+    covariance, precision = estimate_mahalanobis_statistics(
+        target_codes=target_codes,
+        operator_metric=operator_metric,
+        covariance_reg=covariance_reg,
+    )
     for iteration in range(num_iters):
-        # Same objective structure as the paper's second stage:
-        # minimize ||W X - Y*||_F^2 over sparse W.
+        # Original reproduction:
+        #   minimize ||W X - Y*||_F^2 over sparse W.
+        #
+        # Proposal version:
+        #   minimize sum_i (W x_i - y_i*)^T Sigma^{-1} (W x_i - y_i*)
+        # over sparse W, where Sigma is estimated from Y*.
         residual = w @ x - target_codes
-        gradient = residual @ x.T
+        weighted_residual = residual if precision is None else precision @ residual
+        gradient = weighted_residual @ x.T
         oracle = _row_linear_oracle(gradient, row_active)
         step = 2.0 / (iteration + 2.0)
         w = (1.0 - step) * w + step * oracle
-    return _row_topk_binary(w, row_active)
+    return _row_topk_binary(w, row_active), covariance, precision
 
 
 def encode_with_lifting_operator(
@@ -140,6 +199,8 @@ class OSLConfig:
     row_active: int = 6
     y_iters: int = 40
     w_iters: int = 40
+    operator_metric: str = "euclidean"
+    covariance_reg: float = 1e-3
     seed: int = 0
 
 
@@ -150,6 +211,9 @@ class OptimalSparseLifting:
         self.config = config
         self.weight_: np.ndarray | None = None
         self.target_codes_: np.ndarray | None = None
+        self.output_covariance_: np.ndarray | None = None
+        self.output_precision_: np.ndarray | None = None
+        self.fit_summary_: dict[str, float | str] = {}
 
     def fit(self, train_vectors: np.ndarray) -> "OptimalSparseLifting":
         x = np.asarray(train_vectors, dtype=np.float32).T
@@ -162,14 +226,17 @@ class OptimalSparseLifting:
             num_iters=self.config.y_iters,
             rng=rng,
         )
-        self.weight_ = learn_sparse_lifting_operator(
+        self.weight_, self.output_covariance_, self.output_precision_ = learn_sparse_lifting_operator(
             x=x,
             target_codes=self.target_codes_,
             output_dim=self.config.output_dim,
             row_active=self.config.row_active,
             num_iters=self.config.w_iters,
             rng=rng,
+            operator_metric=self.config.operator_metric,
+            covariance_reg=self.config.covariance_reg,
         )
+        self.fit_summary_ = self._build_fit_summary(x)
         return self
 
     def encode(self, vectors: np.ndarray) -> np.ndarray:
@@ -181,8 +248,39 @@ class OptimalSparseLifting:
             hash_length=self.config.hash_length,
         )
 
+    def _build_fit_summary(self, x: np.ndarray) -> dict[str, float | str]:
+        if self.target_codes_ is None or self.weight_ is None:
+            raise RuntimeError("fit summary is only available after fitting")
+
+        y_similarity_error = _relative_frobenius_error(x.T @ x, self.target_codes_.T @ self.target_codes_)
+        residual = self.weight_ @ x - self.target_codes_
+        euclidean_error = float(np.linalg.norm(residual) / max(1, residual.shape[1]))
+        weighted_error = euclidean_error
+        covariance_trace = 0.0
+        precision_trace = 0.0
+        if self.output_precision_ is not None:
+            weighted_error = float(
+                np.sum(residual * (self.output_precision_ @ residual)) / max(1, residual.shape[1])
+            )
+        if self.output_covariance_ is not None:
+            covariance_trace = float(np.trace(self.output_covariance_))
+        if self.output_precision_ is not None:
+            precision_trace = float(np.trace(self.output_precision_))
+        return {
+            "operator_metric": self.config.operator_metric,
+            "y_similarity_error": y_similarity_error,
+            "w_euclidean_error": euclidean_error,
+            "w_weighted_error": weighted_error,
+            "covariance_reg": float(self.config.covariance_reg),
+            "covariance_trace": covariance_trace,
+            "precision_trace": precision_trace,
+        }
+
     def export_config(self) -> dict:
         return asdict(self.config)
+
+    def export_fit_summary(self) -> dict[str, float | str]:
+        return dict(self.fit_summary_)
 
 
 class RandomSparseLifting:

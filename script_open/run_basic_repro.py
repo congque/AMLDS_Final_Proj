@@ -7,6 +7,10 @@ Paper-aligned chain:
 3. solve Y* and then learn W* on the train set
 4. encode evaluation samples with W*
 5. compare neighbor overlap in the original space and output space
+
+Proposal extension:
+- keep the Y* step unchanged
+- replace the Euclidean W-step with a Mahalanobis-weighted W-step when requested
 """
 
 from __future__ import annotations
@@ -121,10 +125,15 @@ def run_experiment(args: argparse.Namespace) -> dict:
         row_active=args.row_active,
         y_iters=args.y_iters,
         w_iters=args.w_iters,
+        operator_metric=args.operator_metric,
+        covariance_reg=args.covariance_reg,
         seed=args.seed,
     )
 
-    print("[info] step 3/5 fitting OSL (solve Y* then learn W*)")
+    print(
+        "[info] step 3/5 fitting OSL "
+        f"(solve Y* then learn W* with operator_metric={args.operator_metric})"
+    )
     osl = OptimalSparseLifting(config).fit(train_vectors)
     print("[info] step 4/5 encoding evaluation vectors")
     osl_codes = osl.encode(eval_vectors)
@@ -170,6 +179,7 @@ def run_experiment(args: argparse.Namespace) -> dict:
         "config": serializable_args,
         "canonical_dataset": dataset_name,
         "osl_config": osl.export_config(),
+        "fit_summary": osl.export_fit_summary(),
         "metrics": asdict(metrics),
     }
 
@@ -191,6 +201,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--neighbor-k", type=int, default=100)
     parser.add_argument("--y-iters", type=int, default=40)
     parser.add_argument("--w-iters", type=int, default=40)
+    parser.add_argument(
+        "--operator-metric",
+        choices=["euclidean", "mahalanobis_diag", "mahalanobis_full"],
+        default="euclidean",
+    )
+    parser.add_argument("--covariance-reg", type=float, default=1e-3)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument(
         "--output",
