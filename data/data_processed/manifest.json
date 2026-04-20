@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "output_dir": "/gpfsnyu/home/zw4922/projs/AMLDS_final/data/data_processed",
+  "num_files": 10,
+  "datasets": [
+    {
+      "dataset_name": "mnist",
+      "output_path": "/gpfsnyu/home/zw4922/projs/AMLDS_final/data/data_processed/mnist.npz",
+      "num_samples": 70000,
+      "feature_dim": 784,
+      "database_size": 60000,
+      "query_size": 10000
+    },
+    {
+      "dataset_name": "glove_6b_300d",
+      "output_path": "/gpfsnyu/home/zw4922/projs/AMLDS_final/data/data_processed/glove_6b_300d.npz",
+      "num_samples": 400000,
+      "feature_dim": 300,
+      "database_size": 400000,
+      "query_size": 0
+    },
+    {
+      "dataset_name": "sift1m",
+      "output_path": "/gpfsnyu/home/zw4922/projs/AMLDS_final/data/data_processed/sift1m.npz",
+      "num_samples": 1110000,
+      "feature_dim": 128,
+      "database_size": 1000000,
+      "query_size": 10000,
+      "train_size": 100000
+    },
+    {
+      "dataset_name": "cshsi_Dioni",
+      "output_path": "/gpfsnyu/home/zw4922/projs/AMLDS_final/data/data_processed/cshsi_Dioni.npz",
+      "num_samples": 344000,
+      "feature_dim": 176,
+      "database_size": 344000,
+      "query_size": 0,
+      "num_classes": 12
+    },
+    {
+      "dataset_name": "cshsi_Houston13",
+      "output_path": "/gpfsnyu/home/zw4922/projs/AMLDS_final/data/data_processed/cshsi_Houston13.npz",
+      "num_samples": 200340,
+      "feature_dim": 48,
+      "database_size": 200340,
+      "query_size": 0,
+      "num_classes": 7
+    },
+    {
+      "dataset_name": "cshsi_Houston18",
+      "output_path": "/gpfsnyu/home/zw4922/projs/AMLDS_final/data/data_processed/cshsi_Houston18.npz",
+      "num_samples": 200340,
+      "feature_dim": 48,
+      "database_size": 200340,
+      "query_size": 0,
+      "num_classes": 7
+    },
+    {
+      "dataset_name": "cshsi_Loukia",
+      "output_path": "/gpfsnyu/home/zw4922/projs/AMLDS_final/data/data_processed/cshsi_Loukia.npz",
+      "num_samples": 235305,
+      "feature_dim": 176,
+      "database_size": 235305,
+      "query_size": 0,
+      "num_classes": 12
+    },
+    {
+      "dataset_name": "cshsi_paviaC",
+      "output_path": "/gpfsnyu/home/zw4922/projs/AMLDS_final/data/data_processed/cshsi_paviaC.npz",
+      "num_samples": 783640,
+      "feature_dim": 102,
+      "database_size": 783640,
+      "query_size": 0,
+      "num_classes": 7
+    },
+    {
+      "dataset_name": "cshsi_paviaU",
+      "output_path": "/gpfsnyu/home/zw4922/projs/AMLDS_final/data/data_processed/cshsi_paviaU.npz",
+      "num_samples": 207400,
+      "feature_dim": 102,
+      "database_size": 207400,
+      "query_size": 0,
+      "num_classes": 7
+    },
+    {
+      "dataset_name": "mars_15d_band4",
+      "output_path": "/gpfsnyu/home/zw4922/projs/AMLDS_final/data/data_processed/mars_15d_band4.npz",
+      "num_samples": 465,
+      "feature_dim": 16384,
+      "database_size": 465,
+      "query_size": 0
+    }
+  ]
+}
