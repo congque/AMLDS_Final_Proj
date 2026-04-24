@@ -22,6 +22,15 @@ python script_open/run_dataset_benchmark.py mars_15d_band4
 
 The script prints all methods and also writes a JSON file under `results/`.
 
+## Final results
+
+Clean final report-ready results are kept in:
+
+- `results/final/final_results_report.md`
+- `results/final/main_retrieval_summary.json`
+- `results/final/category_grouping_summary.json`
+- `results/final/selected_final_results.json`
+
 ## Output
 
 For each method it reports:
