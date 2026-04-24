@@ -16,24 +16,6 @@ import tifffile
 
 
 @dataclass
-class IdxImageInfo:
-    count: int
-    rows: int
-    cols: int
-
-
-@dataclass
-class IdxLabelInfo:
-    count: int
-
-
-@dataclass
-class VecFileInfo:
-    count: int
-    dimension: int
-
-
-@dataclass
 class CshsiSceneSpec:
     scene_name: str
     data_path: Path
@@ -50,60 +32,22 @@ class CshsiSceneData:
 UNIFIED_DATASET_SCHEMA_VERSION = 1
 
 
-@dataclass
-class UnifiedDataset:
-    dataset_name: str
-    family_name: str
-    unit_type: str
-    vectors: np.ndarray
-    labels: np.ndarray
-    split_codes: np.ndarray
-    split_names: np.ndarray
-    database_indices: np.ndarray
-    train_indices: np.ndarray
-    query_indices: np.ndarray
-    ground_truth_neighbors: np.ndarray
-    coords: np.ndarray
-    sample_names: np.ndarray
-    sample_shape: np.ndarray
-    class_ids: np.ndarray
-    metadata_json: str
-
-    @property
-    def metadata(self) -> dict:
-        return json.loads(self.metadata_json)
-
-
-def read_idx_image_info(path: Path) -> IdxImageInfo:
+def load_idx_images(path: Path) -> np.ndarray:
     with path.open("rb") as handle:
         magic, count, rows, cols = struct.unpack(">IIII", handle.read(16))
-    if magic != 2051:
-        raise ValueError(f"unexpected IDX image magic number in {path}: {magic}")
-    return IdxImageInfo(count=count, rows=rows, cols=cols)
-
-
-def read_idx_label_info(path: Path) -> IdxLabelInfo:
-    with path.open("rb") as handle:
-        magic, count = struct.unpack(">II", handle.read(8))
-    if magic != 2049:
-        raise ValueError(f"unexpected IDX label magic number in {path}: {magic}")
-    return IdxLabelInfo(count=count)
-
-
-def load_idx_images(path: Path) -> np.ndarray:
-    info = read_idx_image_info(path)
-    with path.open("rb") as handle:
-        handle.seek(16)
+        if magic != 2051:
+            raise ValueError(f"unexpected IDX image magic number in {path}: {magic}")
         array = np.frombuffer(handle.read(), dtype=np.uint8)
-    return array.reshape(info.count, info.rows, info.cols)
+    return array.reshape(count, rows, cols)
 
 
 def load_idx_labels(path: Path) -> np.ndarray:
-    info = read_idx_label_info(path)
     with path.open("rb") as handle:
-        handle.seek(8)
+        magic, count = struct.unpack(">II", handle.read(8))
+        if magic != 2049:
+            raise ValueError(f"unexpected IDX label magic number in {path}: {magic}")
         array = np.frombuffer(handle.read(), dtype=np.uint8)
-    return array.reshape(info.count)
+    return array.reshape(count)
 
 
 def mnist_root(data_root: Path) -> Path:
@@ -142,33 +86,6 @@ def read_ivecs(path: Path, max_vectors: Optional[int] = None) -> np.ndarray:
     if max_vectors is not None:
         vectors = vectors[:max_vectors]
     return vectors
-
-
-def read_vec_file_info(path: Path) -> VecFileInfo:
-    with path.open("rb") as handle:
-        dimension = struct.unpack("<i", handle.read(4))[0]
-    if dimension <= 0:
-        raise ValueError(f"invalid vector dimension in {path}: {dimension}")
-    vector_bytes = 4 * (dimension + 1)
-    file_size = path.stat().st_size
-    if file_size % vector_bytes != 0:
-        raise ValueError(
-            f"file size {file_size} is not aligned with dimension {dimension} in {path}"
-        )
-    return VecFileInfo(count=file_size // vector_bytes, dimension=dimension)
-
-
-def read_glove_info(path: Path) -> VecFileInfo:
-    with path.open("r", encoding="utf-8") as handle:
-        first_line = handle.readline().strip()
-    if not first_line:
-        raise ValueError(f"empty GloVe file: {path}")
-    dimension = len(first_line.split()) - 1
-    if dimension <= 0:
-        raise ValueError(f"failed to infer GloVe dimension from {path}")
-    return VecFileInfo(count=-1, dimension=dimension)
-
-
 def load_glove_entries(path: Path, max_vectors: Optional[int] = None) -> tuple[np.ndarray, np.ndarray]:
     tokens = []
     vectors = []
@@ -348,74 +265,7 @@ def save_unified_dataset(
     metadata: Optional[dict] = None,
 ) -> None:
     vectors = np.asarray(vectors, dtype=np.float32)
-    if vectors.ndim != 2:
-        raise ValueError(f"expected vectors to be 2D, got shape {vectors.shape}")
     num_samples = vectors.shape[0]
-
-    if labels is None:
-        labels = np.full(num_samples, -1, dtype=np.int32)
-    else:
-        labels = np.asarray(labels, dtype=np.int32)
-        if labels.shape != (num_samples,):
-            raise ValueError(f"labels must have shape ({num_samples},), got {labels.shape}")
-
-    if split_codes is None:
-        split_codes = np.zeros(num_samples, dtype=np.int16)
-    else:
-        split_codes = np.asarray(split_codes, dtype=np.int16)
-        if split_codes.shape != (num_samples,):
-            raise ValueError(f"split_codes must have shape ({num_samples},), got {split_codes.shape}")
-
-    if split_names is None:
-        split_names = np.asarray(["all"])
-    else:
-        split_names = np.asarray(split_names)
-
-    if database_indices is None:
-        database_indices = np.arange(num_samples, dtype=np.int64)
-    else:
-        database_indices = np.asarray(database_indices, dtype=np.int64)
-
-    if train_indices is None:
-        train_indices = np.empty((0,), dtype=np.int64)
-    else:
-        train_indices = np.asarray(train_indices, dtype=np.int64)
-
-    if query_indices is None:
-        query_indices = np.empty((0,), dtype=np.int64)
-    else:
-        query_indices = np.asarray(query_indices, dtype=np.int64)
-
-    if ground_truth_neighbors is None:
-        ground_truth_neighbors = np.empty((0, 0), dtype=np.int64)
-    else:
-        ground_truth_neighbors = np.asarray(ground_truth_neighbors, dtype=np.int64)
-        if ground_truth_neighbors.ndim != 2:
-            raise ValueError(
-                f"ground_truth_neighbors must be 2D, got shape {ground_truth_neighbors.shape}"
-            )
-
-    if coords is None:
-        coords = np.empty((0, 2), dtype=np.int32)
-    else:
-        coords = np.asarray(coords, dtype=np.int32)
-        if coords.ndim != 2 or coords.shape[1] != 2:
-            raise ValueError(f"coords must have shape (N, 2), got {coords.shape}")
-
-    if sample_names is None:
-        sample_names = np.empty((0,), dtype=np.str_)
-    else:
-        sample_names = np.asarray(sample_names)
-
-    if sample_shape is None:
-        sample_shape = np.empty((0,), dtype=np.int32)
-    else:
-        sample_shape = np.asarray(sample_shape, dtype=np.int32)
-
-    if class_ids is None:
-        class_ids = np.empty((0,), dtype=np.int32)
-    else:
-        class_ids = np.asarray(class_ids, dtype=np.int32)
 
     payload = {
         "schema_version": np.asarray(UNIFIED_DATASET_SCHEMA_VERSION, dtype=np.int32),
@@ -424,43 +274,33 @@ def save_unified_dataset(
         "unit_type": np.asarray(unit_type),
         "feature_dim": np.asarray(vectors.shape[1], dtype=np.int32),
         "vectors": vectors,
-        "labels": labels,
-        "split_codes": split_codes,
-        "split_names": split_names,
-        "database_indices": database_indices,
-        "train_indices": train_indices,
-        "query_indices": query_indices,
-        "ground_truth_neighbors": ground_truth_neighbors,
-        "coords": coords,
-        "sample_names": sample_names,
-        "sample_shape": sample_shape,
-        "class_ids": class_ids,
+        "labels": np.full(num_samples, -1, dtype=np.int32) if labels is None else np.asarray(labels, dtype=np.int32),
+        "split_codes": np.zeros(num_samples, dtype=np.int16)
+        if split_codes is None
+        else np.asarray(split_codes, dtype=np.int16),
+        "split_names": np.asarray(["all"]) if split_names is None else np.asarray(split_names),
+        "database_indices": np.arange(num_samples, dtype=np.int64)
+        if database_indices is None
+        else np.asarray(database_indices, dtype=np.int64),
+        "train_indices": np.empty((0,), dtype=np.int64)
+        if train_indices is None
+        else np.asarray(train_indices, dtype=np.int64),
+        "query_indices": np.empty((0,), dtype=np.int64)
+        if query_indices is None
+        else np.asarray(query_indices, dtype=np.int64),
+        "ground_truth_neighbors": np.empty((0, 0), dtype=np.int64)
+        if ground_truth_neighbors is None
+        else np.asarray(ground_truth_neighbors, dtype=np.int64),
+        "coords": np.empty((0, 2), dtype=np.int32) if coords is None else np.asarray(coords, dtype=np.int32),
+        "sample_names": np.empty((0,), dtype=np.str_) if sample_names is None else np.asarray(sample_names),
+        "sample_shape": np.empty((0,), dtype=np.int32)
+        if sample_shape is None
+        else np.asarray(sample_shape, dtype=np.int32),
+        "class_ids": np.empty((0,), dtype=np.int32) if class_ids is None else np.asarray(class_ids, dtype=np.int32),
         "metadata_json": np.asarray(json.dumps(metadata or {}, sort_keys=True)),
     }
     path.parent.mkdir(parents=True, exist_ok=True)
     np.savez(path, **payload)
-
-
-def load_unified_dataset(path: Path) -> UnifiedDataset:
-    with np.load(path, allow_pickle=False) as data:
-        return UnifiedDataset(
-            dataset_name=str(data["dataset_name"].item()),
-            family_name=str(data["family_name"].item()),
-            unit_type=str(data["unit_type"].item()),
-            vectors=np.asarray(data["vectors"], dtype=np.float32),
-            labels=np.asarray(data["labels"], dtype=np.int32),
-            split_codes=np.asarray(data["split_codes"], dtype=np.int16),
-            split_names=np.asarray(data["split_names"]),
-            database_indices=np.asarray(data["database_indices"], dtype=np.int64),
-            train_indices=np.asarray(data["train_indices"], dtype=np.int64),
-            query_indices=np.asarray(data["query_indices"], dtype=np.int64),
-            ground_truth_neighbors=np.asarray(data["ground_truth_neighbors"], dtype=np.int64),
-            coords=np.asarray(data["coords"], dtype=np.int32),
-            sample_names=np.asarray(data["sample_names"]),
-            sample_shape=np.asarray(data["sample_shape"], dtype=np.int32),
-            class_ids=np.asarray(data["class_ids"], dtype=np.int32),
-            metadata_json=str(data["metadata_json"].item()),
-        )
 
 
 def processed_data_root(project_root: Path) -> Path:
@@ -470,6 +310,11 @@ def processed_data_root(project_root: Path) -> Path:
 def load_processed_manifest(processed_root: Path) -> dict:
     manifest_path = processed_root / "manifest.json"
     return json.loads(manifest_path.read_text(encoding="utf-8"))
+
+
+def list_processed_dataset_names(processed_root: Path) -> list[str]:
+    manifest = load_processed_manifest(processed_root)
+    return [item["dataset_name"] for item in manifest["datasets"]]
 
 
 def processed_dataset_path(processed_root: Path, dataset_name: str) -> Path:
@@ -485,8 +330,27 @@ def load_processed_vectors(
     dataset_name: str,
     max_samples: Optional[int] = None,
 ) -> np.ndarray:
-    dataset = load_unified_dataset(processed_dataset_path(processed_root, dataset_name))
-    vectors = dataset.vectors
+    with np.load(processed_dataset_path(processed_root, dataset_name), allow_pickle=False) as data:
+        vectors = np.asarray(data["vectors"], dtype=np.float32)
     if max_samples is not None:
         vectors = vectors[:max_samples]
     return vectors
+
+
+def load_processed_dataset_arrays(
+    processed_root: Path,
+    dataset_name: str,
+    max_samples: Optional[int] = None,
+) -> dict[str, np.ndarray]:
+    with np.load(processed_dataset_path(processed_root, dataset_name), allow_pickle=False) as data:
+        vectors = np.asarray(data["vectors"], dtype=np.float32)
+        labels = np.asarray(data["labels"], dtype=np.int32)
+        class_ids = np.asarray(data["class_ids"], dtype=np.int32)
+    if max_samples is not None:
+        vectors = vectors[:max_samples]
+        labels = labels[:max_samples]
+    return {
+        "vectors": vectors,
+        "labels": labels,
+        "class_ids": class_ids,
+    }

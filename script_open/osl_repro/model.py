@@ -1,4 +1,4 @@
-"""Minimal but paper-aligned Optimal Sparse Lifting implementation."""
+"""Minimal, paper-aligned, but simplified Optimal Sparse Lifting implementation."""
 
 from __future__ import annotations
 
@@ -7,46 +7,69 @@ from dataclasses import asdict, dataclass
 import numpy as np
 
 
-def _axis_binary_mask_from_topk(values: np.ndarray, count: int, axis: int) -> np.ndarray:
-    if axis not in (0, 1):
-        raise ValueError(f"unsupported axis: {axis}")
+def _column_topk_binary(scores: np.ndarray, count: int) -> np.ndarray:
     if count <= 0:
-        return np.zeros_like(values, dtype=np.float32)
-    axis_size = values.shape[axis]
-    if count >= axis_size:
-        return np.ones_like(values, dtype=np.float32)
-
-    indices = np.argpartition(values, kth=axis_size - count, axis=axis)[
-        (slice(None),) * axis + (slice(axis_size - count, None),)
-    ]
-    mask = np.zeros_like(values, dtype=np.float32)
-    if axis == 0:
-        cols = np.arange(values.shape[1])[None, :]
-        mask[indices, cols] = 1.0
-    else:
-        rows = np.arange(values.shape[0])[:, None]
-        mask[rows, indices] = 1.0
+        return np.zeros_like(scores, dtype=np.float32)
+    if count >= scores.shape[0]:
+        return np.ones_like(scores, dtype=np.float32)
+    indices = np.argpartition(scores, kth=scores.shape[0] - count, axis=0)[-count:]
+    mask = np.zeros_like(scores, dtype=np.float32)
+    cols = np.arange(scores.shape[1])[None, :]
+    mask[indices, cols] = 1.0
     return mask
 
 
-def _axis_binary_mask_from_bottomk(values: np.ndarray, count: int, axis: int) -> np.ndarray:
-    return _axis_binary_mask_from_topk(-values, count=count, axis=axis)
-
-
-def _column_topk_binary(scores: np.ndarray, count: int) -> np.ndarray:
-    return _axis_binary_mask_from_topk(scores, count=count, axis=0)
-
-
 def _row_topk_binary(scores: np.ndarray, count: int) -> np.ndarray:
-    return _axis_binary_mask_from_topk(scores, count=count, axis=1)
+    if count <= 0:
+        return np.zeros_like(scores, dtype=np.float32)
+    if count >= scores.shape[1]:
+        return np.ones_like(scores, dtype=np.float32)
+    indices = np.argpartition(scores, kth=scores.shape[1] - count, axis=1)[:, -count:]
+    mask = np.zeros_like(scores, dtype=np.float32)
+    rows = np.arange(scores.shape[0])[:, None]
+    mask[rows, indices] = 1.0
+    return mask
 
 
 def _column_linear_oracle(gradient: np.ndarray, count: int) -> np.ndarray:
-    return _axis_binary_mask_from_bottomk(gradient, count=count, axis=0)
+    return _column_topk_binary(-gradient, count=count)
 
 
 def _row_linear_oracle(gradient: np.ndarray, count: int) -> np.ndarray:
-    return _axis_binary_mask_from_bottomk(gradient, count=count, axis=1)
+    return _row_topk_binary(-gradient, count=count)
+
+
+def _global_topk_binary(scores: np.ndarray, count: int) -> np.ndarray:
+    if count <= 0:
+        return np.zeros_like(scores, dtype=np.float32)
+    flat = scores.reshape(-1)
+    if count >= flat.size:
+        return np.ones_like(scores, dtype=np.float32)
+    indices = np.argpartition(flat, kth=flat.size - count)[-count:]
+    mask = np.zeros_like(flat, dtype=np.float32)
+    mask[indices] = 1.0
+    return mask.reshape(scores.shape)
+
+
+def _hybrid_sparse_projection(weights: np.ndarray, total_active: int, min_per_row: int = 1) -> np.ndarray:
+    if total_active <= 0:
+        return np.zeros_like(weights, dtype=np.float32)
+
+    output_dim, input_dim = weights.shape
+    min_per_row = max(0, min(min_per_row, input_dim))
+    min_budget = min(total_active, output_dim * min_per_row)
+    base_mask = _row_topk_binary(np.abs(weights), min_per_row) if min_budget > 0 else np.zeros_like(
+        weights,
+        dtype=np.float32,
+    )
+
+    remaining = total_active - int(base_mask.sum())
+    if remaining <= 0:
+        return weights * base_mask
+
+    free_scores = np.abs(weights) * (1.0 - base_mask)
+    extra_mask = _global_topk_binary(free_scores, remaining)
+    return weights * np.maximum(base_mask, extra_mask)
 
 
 def _relative_frobenius_error(reference: np.ndarray, estimate: np.ndarray, eps: float = 1e-8) -> float:
@@ -154,30 +177,51 @@ def learn_sparse_lifting_operator(
     """
 
     input_dim = x.shape[0]
-    w = np.zeros((output_dim, input_dim), dtype=np.float32)
-    for row in range(output_dim):
-        active = rng.choice(input_dim, size=row_active, replace=False)
-        w[row, active] = 1.0
-
     covariance, precision = estimate_mahalanobis_statistics(
         target_codes=target_codes,
         operator_metric=operator_metric,
         covariance_reg=covariance_reg,
     )
+
+    if operator_metric == "euclidean":
+        w = np.zeros((output_dim, input_dim), dtype=np.float32)
+        for row in range(output_dim):
+            active = rng.choice(input_dim, size=row_active, replace=False)
+            w[row, active] = 1.0
+
+        for iteration in range(num_iters):
+            residual = w @ x - target_codes
+            gradient = residual @ x.T
+            oracle = _row_linear_oracle(gradient, row_active)
+            step = 2.0 / (iteration + 2.0)
+            w = (1.0 - step) * w + step * oracle
+        return _row_topk_binary(w, row_active), covariance, precision
+
+    total_active = output_dim * row_active
+    min_per_row = 1
+    sample_count = max(1, x.shape[1])
+    weighted_targets = target_codes if precision is None else precision @ target_codes
+    w = (weighted_targets @ x.T) / float(sample_count)
+    w = _hybrid_sparse_projection(
+        w.astype(np.float32, copy=False),
+        total_active=total_active,
+        min_per_row=min_per_row,
+    )
+
+    x_scale = float(np.linalg.norm(x, ord="fro") ** 2 / float(sample_count))
+    precision_scale = 1.0 if precision is None else float(np.linalg.norm(precision, ord=2))
+    step_size = 1.0 / max(x_scale * precision_scale, 1e-6)
+
     for iteration in range(num_iters):
-        # Original reproduction:
-        #   minimize ||W X - Y*||_F^2 over sparse W.
-        #
-        # Proposal version:
-        #   minimize sum_i (W x_i - y_i*)^T Sigma^{-1} (W x_i - y_i*)
-        # over sparse W, where Sigma is estimated from Y*.
         residual = w @ x - target_codes
         weighted_residual = residual if precision is None else precision @ residual
-        gradient = weighted_residual @ x.T
-        oracle = _row_linear_oracle(gradient, row_active)
-        step = 2.0 / (iteration + 2.0)
-        w = (1.0 - step) * w + step * oracle
-    return _row_topk_binary(w, row_active), covariance, precision
+        gradient = (weighted_residual @ x.T) / float(sample_count)
+        candidate = w - step_size * gradient
+        w = _hybrid_sparse_projection(candidate, total_active=total_active, min_per_row=min_per_row).astype(
+            np.float32,
+            copy=False,
+        )
+    return w, covariance, precision
 
 
 def encode_with_lifting_operator(
@@ -189,7 +233,7 @@ def encode_with_lifting_operator(
 
     x = np.asarray(vectors, dtype=np.float32).T
     scores = weight @ x
-    return _column_topk_binary(scores, hash_length).T.astype(np.float32, copy=False)
+    return _column_topk_binary(scores, hash_length).T
 
 
 @dataclass
@@ -205,7 +249,11 @@ class OSLConfig:
 
 
 class OptimalSparseLifting:
-    """Two-stage OSL trainer aligned with the paper's solve-Y then solve-W chain."""
+    """Two-stage OSL trainer following the paper's solve-Y then solve-W chain.
+
+    The training order matches the paper, but the solver is a lightweight
+    Frank-Wolfe-style approximation rather than the exact constrained optimizer.
+    """
 
     def __init__(self, config: OSLConfig):
         self.config = config
@@ -305,7 +353,7 @@ class RandomSparseLifting:
     def encode(self, vectors: np.ndarray) -> np.ndarray:
         x = np.asarray(vectors, dtype=np.float32).T
         scores = self.weight_ @ x
-        return _column_topk_binary(scores, self.hash_length).T.astype(np.float32, copy=False)
+        return _column_topk_binary(scores, self.hash_length).T
 
 
 class RandomDenseProjection:
@@ -325,4 +373,4 @@ class RandomDenseProjection:
     def encode(self, vectors: np.ndarray) -> np.ndarray:
         x = np.asarray(vectors, dtype=np.float32).T
         scores = self.weight_ @ x
-        return _column_topk_binary(scores, self.hash_length).T.astype(np.float32, copy=False)
+        return _column_topk_binary(scores, self.hash_length).T

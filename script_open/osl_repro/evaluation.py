@@ -25,25 +25,52 @@ def topk_indices(similarity: np.ndarray, k: int) -> np.ndarray:
     return partition[row_ids, order]
 
 
-def precision_at_k_from_features(
-    input_features: np.ndarray,
-    output_features: np.ndarray,
-    neighbor_k: int = 100,
+def neighbors_from_features(features: np.ndarray, neighbor_k: int = 100) -> np.ndarray:
+    similarity = features @ features.T
+    np.fill_diagonal(similarity, -np.inf)
+    return topk_indices(similarity, neighbor_k)
+
+
+def precision_at_k_from_neighbors(
+    input_neighbors: np.ndarray,
+    output_neighbors: np.ndarray,
+    neighbor_k: int,
 ) -> float:
-    input_similarity = input_features @ input_features.T
-    output_similarity = output_features @ output_features.T
-    np.fill_diagonal(input_similarity, -np.inf)
-    np.fill_diagonal(output_similarity, -np.inf)
-
-    input_neighbors = topk_indices(input_similarity, neighbor_k)
-    output_neighbors = topk_indices(output_similarity, neighbor_k)
-
     overlap = []
     for index in range(input_neighbors.shape[0]):
         gt = set(input_neighbors[index].tolist())
         pred = output_neighbors[index].tolist()
         overlap.append(sum(candidate in gt for candidate in pred) / float(neighbor_k))
     return float(np.mean(overlap))
+
+
+def precision_at_k_from_features(
+    input_features: np.ndarray,
+    output_features: np.ndarray,
+    neighbor_k: int = 100,
+) -> float:
+    input_neighbors = neighbors_from_features(input_features, neighbor_k)
+    output_neighbors = neighbors_from_features(output_features, neighbor_k)
+    return precision_at_k_from_neighbors(input_neighbors, output_neighbors, neighbor_k)
+
+
+def same_label_precision_at_k(
+    output_neighbors: np.ndarray,
+    labels: np.ndarray,
+    class_ids: np.ndarray,
+) -> float | None:
+    if class_ids.size == 0:
+        return None
+    labels = np.asarray(labels)
+    valid = np.isin(labels, class_ids)
+    query_ids = np.flatnonzero(valid)
+    if query_ids.size == 0:
+        return None
+    scores = []
+    for index in query_ids:
+        pred = output_neighbors[index]
+        scores.append(float(np.mean(labels[pred] == labels[index])))
+    return float(np.mean(scores))
 
 
 @dataclass
