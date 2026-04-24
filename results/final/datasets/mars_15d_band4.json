@@ -1,50 +1,94 @@
 {
   "dataset": "mars_15d_band4",
+  "config": {
+    "num_train": 100,
+    "num_eval": 300,
+    "neighbor_k": 50,
+    "output_dim": 320,
+    "hash_length": 8,
+    "row_active": 8,
+    "y_iters": 20,
+    "w_iters": 40,
+    "covariance_reg": 0.01
+  },
+  "shared_osl_config": {
+    "output_dim": 320,
+    "hash_length": 8,
+    "row_active": 8,
+    "y_iters": 20,
+    "w_iters": 40,
+    "covariance_reg": 0.01,
+    "seed": 0
+  },
+  "selection": {
+    "tuned_method": "osl_mahalanobis_full",
+    "selection_datasets": [
+      "cshsi_paviaU",
+      "cshsi_Houston18",
+      "mars_15d_band4"
+    ],
+    "selection_rule": "maximize mean_precision + mean_same_label_precision"
+  },
+  "num_samples": 465,
+  "input_dim": 16384,
+  "num_labeled_eval": 0,
   "methods": [
     {
       "method": "osl_euclidean",
+      "operator_metric": "euclidean",
+      "fit_time_sec": 13.601339898072183,
+      "encode_time_sec": 0.10114857880398631,
+      "query_time_sec": 0.09636493399739265,
+      "fit_summary": {
+        "operator_metric": "euclidean",
+        "y_similarity_error": 3.2756748057600067,
+        "w_euclidean_error": 0.25855607986450196,
+        "w_weighted_error": 0.25855607986450196,
+        "covariance_reg": 0.01,
+        "covariance_trace": 0.0,
+        "precision_trace": 0.0
+      },
       "neighbor_k": 50,
-      "precision": 0.2801333333333333,
-      "same_label_precision": null,
-      "fit_time_sec": 4.244919659104198,
-      "encode_time_sec": 0.0061617689207196236,
-      "query_time_sec": 0.0020952457562088966
+      "precision_at_100": 0.27113333333333334,
+      "same_label_precision_at_100": null
     },
     {
       "method": "osl_mahalanobis_diag",
+      "operator_metric": "mahalanobis_diag",
+      "fit_time_sec": 15.395763163920492,
+      "encode_time_sec": 0.10204140795394778,
+      "query_time_sec": 0.002518582157790661,
+      "fit_summary": {
+        "operator_metric": "mahalanobis_diag",
+        "y_similarity_error": 3.2756748057600067,
+        "w_euclidean_error": 0.2816996765136719,
+        "w_weighted_error": 160.77201171875,
+        "covariance_reg": 0.01,
+        "covariance_trace": 10.883840560913086,
+        "precision_trace": 16236.2919921875
+      },
       "neighbor_k": 50,
-      "precision": 0.44586666666666663,
-      "same_label_precision": null,
-      "fit_time_sec": 4.393662445247173,
-      "encode_time_sec": 0.006559776142239571,
-      "query_time_sec": 0.002173961140215397
+      "precision_at_100": 0.45633333333333326,
+      "same_label_precision_at_100": null
     },
     {
       "method": "osl_mahalanobis_full",
+      "operator_metric": "mahalanobis_full",
+      "fit_time_sec": 15.013426162768155,
+      "encode_time_sec": 0.08609984209761024,
+      "query_time_sec": 0.09606435801833868,
+      "fit_summary": {
+        "operator_metric": "mahalanobis_full",
+        "y_similarity_error": 3.2756748057600067,
+        "w_euclidean_error": 0.2819353103637695,
+        "w_weighted_error": 112.9126953125,
+        "covariance_reg": 0.01,
+        "covariance_trace": 10.883840560913086,
+        "precision_trace": 23941.34375
+      },
       "neighbor_k": 50,
-      "precision": 0.31446666666666667,
-      "same_label_precision": null,
-      "fit_time_sec": 4.379613597877324,
-      "encode_time_sec": 0.00478234002366662,
-      "query_time_sec": 0.0016685421578586102
-    },
-    {
-      "method": "random_dense",
-      "neighbor_k": 50,
-      "precision": 0.49520000000000003,
-      "same_label_precision": null,
-      "fit_time_sec": 0.2281178580597043,
-      "encode_time_sec": 0.004388488829135895,
-      "query_time_sec": 0.0021078791469335556
-    },
-    {
-      "method": "random_sparse",
-      "neighbor_k": 50,
-      "precision": 0.2670666666666667,
-      "same_label_precision": null,
-      "fit_time_sec": 0.07216828828677535,
-      "encode_time_sec": 0.0037957699969410896,
-      "query_time_sec": 0.0021722372621297836
+      "precision_at_100": 0.3304,
+      "same_label_precision_at_100": null
     }
   ]
 }

@@ -1,455 +1,293 @@
 {
-  "experiment": "final_main_retrieval",
+  "experiment": "final_osl_only_results",
+  "shared_osl_config": {
+    "output_dim": 320,
+    "hash_length": 8,
+    "row_active": 8,
+    "y_iters": 20,
+    "w_iters": 40,
+    "covariance_reg": 0.01,
+    "seed": 0
+  },
+  "selection": {
+    "tuned_method": "osl_mahalanobis_full",
+    "selection_datasets": [
+      "cshsi_paviaU",
+      "cshsi_Houston18",
+      "mars_15d_band4"
+    ],
+    "selection_rule": "maximize mean_precision + mean_same_label_precision"
+  },
   "rows": [
     {
       "dataset": "cshsi_Dioni",
       "method": "osl_euclidean",
       "neighbor_k": 100,
-      "precision": 0.21912,
-      "fit_time_sec": 0.6003996613435447,
-      "encode_time_sec": 0.0037066200748085976,
-      "query_time_sec": 0.10039232904091477
+      "precision": 0.44262999999999997,
+      "fit_time_sec": 2.2966464939527214,
+      "encode_time_sec": 0.19568956596776843,
+      "query_time_sec": 0.20653598196804523
     },
     {
       "dataset": "cshsi_Dioni",
       "method": "osl_mahalanobis_diag",
       "neighbor_k": 100,
-      "precision": 0.29595,
-      "fit_time_sec": 0.4864151398651302,
-      "encode_time_sec": 0.004032727796584368,
-      "query_time_sec": 0.10116478987038136
+      "precision": 0.46153000000000005,
+      "fit_time_sec": 3.3740449072793126,
+      "encode_time_sec": 0.10076285526156425,
+      "query_time_sec": 0.20826210267841816
     },
     {
       "dataset": "cshsi_Dioni",
       "method": "osl_mahalanobis_full",
       "neighbor_k": 100,
-      "precision": 0.27695,
-      "fit_time_sec": 0.4936698800884187,
-      "encode_time_sec": 0.0035223951563239098,
-      "query_time_sec": 0.09543002722784877
-    },
-    {
-      "dataset": "cshsi_Dioni",
-      "method": "random_sparse",
-      "neighbor_k": 100,
-      "precision": 0.57371,
-      "fit_time_sec": 0.00423520989716053,
-      "encode_time_sec": 0.004055425990372896,
-      "query_time_sec": 0.08785738190636039
-    },
-    {
-      "dataset": "cshsi_Dioni",
-      "method": "random_dense",
-      "neighbor_k": 100,
-      "precision": 0.68232,
-      "fit_time_sec": 0.0008833268657326698,
-      "encode_time_sec": 0.004050498362630606,
-      "query_time_sec": 0.09734735218808055
+      "precision": 0.28457,
+      "fit_time_sec": 3.773088512942195,
+      "encode_time_sec": 0.10099251521751285,
+      "query_time_sec": 0.20209227362647653
     },
     {
       "dataset": "cshsi_Houston13",
       "method": "osl_euclidean",
       "neighbor_k": 100,
-      "precision": 0.2421,
-      "fit_time_sec": 0.4071681280620396,
-      "encode_time_sec": 0.0020758258178830147,
-      "query_time_sec": 0.09626056300476193
+      "precision": 0.34728,
+      "fit_time_sec": 1.2980208229273558,
+      "encode_time_sec": 0.0988843203522265,
+      "query_time_sec": 0.21122355666011572
     },
     {
       "dataset": "cshsi_Houston13",
       "method": "osl_mahalanobis_diag",
       "neighbor_k": 100,
-      "precision": 0.57759,
-      "fit_time_sec": 0.5898575838655233,
-      "encode_time_sec": 0.003255068324506283,
-      "query_time_sec": 0.09747950406745076
+      "precision": 0.49119,
+      "fit_time_sec": 2.700961675029248,
+      "encode_time_sec": 0.09971910016611218,
+      "query_time_sec": 0.2036701561883092
     },
     {
       "dataset": "cshsi_Houston13",
       "method": "osl_mahalanobis_full",
       "neighbor_k": 100,
-      "precision": 0.5599200000000001,
-      "fit_time_sec": 0.498673876747489,
-      "encode_time_sec": 0.0032949410378932953,
-      "query_time_sec": 0.10328629286959767
-    },
-    {
-      "dataset": "cshsi_Houston13",
-      "method": "random_sparse",
-      "neighbor_k": 100,
-      "precision": 0.57988,
-      "fit_time_sec": 0.003864775877445936,
-      "encode_time_sec": 0.004765530116856098,
-      "query_time_sec": 0.0764700579456985
-    },
-    {
-      "dataset": "cshsi_Houston13",
-      "method": "random_dense",
-      "neighbor_k": 100,
-      "precision": 0.74997,
-      "fit_time_sec": 0.0003316197544336319,
-      "encode_time_sec": 0.003994397819042206,
-      "query_time_sec": 0.09216270688921213
+      "precision": 0.7200899999999999,
+      "fit_time_sec": 2.8732814551331103,
+      "encode_time_sec": 0.1998176290653646,
+      "query_time_sec": 0.20233455300331116
     },
     {
       "dataset": "cshsi_Houston18",
       "method": "osl_euclidean",
       "neighbor_k": 100,
-      "precision": 0.20348000000000002,
-      "fit_time_sec": 0.4923544027842581,
-      "encode_time_sec": 0.00217025401070714,
-      "query_time_sec": 0.01221067039296031
+      "precision": 0.28782,
+      "fit_time_sec": 1.5980538884177804,
+      "encode_time_sec": 0.09829542227089405,
+      "query_time_sec": 0.20229540392756462
     },
     {
       "dataset": "cshsi_Houston18",
       "method": "osl_mahalanobis_diag",
       "neighbor_k": 100,
-      "precision": 0.55896,
-      "fit_time_sec": 0.500792439095676,
-      "encode_time_sec": 0.0033523431047797203,
-      "query_time_sec": 0.09944743802770972
+      "precision": 0.49428,
+      "fit_time_sec": 2.27608934417367,
+      "encode_time_sec": 0.09987591207027435,
+      "query_time_sec": 0.201303169131279
     },
     {
       "dataset": "cshsi_Houston18",
       "method": "osl_mahalanobis_full",
       "neighbor_k": 100,
-      "precision": 0.6464500000000001,
-      "fit_time_sec": 0.5005889530293643,
-      "encode_time_sec": 0.0879282159730792,
-      "query_time_sec": 0.10001395782455802
-    },
-    {
-      "dataset": "cshsi_Houston18",
-      "method": "random_sparse",
-      "neighbor_k": 100,
-      "precision": 0.6093999999999999,
-      "fit_time_sec": 0.004262529779225588,
-      "encode_time_sec": 0.004060252103954554,
-      "query_time_sec": 0.08776389807462692
-    },
-    {
-      "dataset": "cshsi_Houston18",
-      "method": "random_dense",
-      "neighbor_k": 100,
-      "precision": 0.7230899999999999,
-      "fit_time_sec": 0.0003600679337978363,
-      "encode_time_sec": 0.0046359580010175705,
-      "query_time_sec": 0.09298214595764875
+      "precision": 0.6484800000000001,
+      "fit_time_sec": 2.973708359990269,
+      "encode_time_sec": 0.10199631191790104,
+      "query_time_sec": 0.20901155890896916
     },
     {
       "dataset": "cshsi_Loukia",
       "method": "osl_euclidean",
       "neighbor_k": 100,
-      "precision": 0.37465000000000004,
-      "fit_time_sec": 0.597968780901283,
-      "encode_time_sec": 0.0032621067948639393,
-      "query_time_sec": 0.10051358444616199
+      "precision": 0.40835,
+      "fit_time_sec": 1.7958223428577185,
+      "encode_time_sec": 0.005490337964147329,
+      "query_time_sec": 0.20708120428025723
     },
     {
       "dataset": "cshsi_Loukia",
       "method": "osl_mahalanobis_diag",
       "neighbor_k": 100,
-      "precision": 0.29039,
-      "fit_time_sec": 0.6035026200115681,
-      "encode_time_sec": 0.08749537076801062,
-      "query_time_sec": 0.012840037234127522
+      "precision": 0.51502,
+      "fit_time_sec": 2.985743129160255,
+      "encode_time_sec": 0.1007320312783122,
+      "query_time_sec": 0.20419036876410246
     },
     {
       "dataset": "cshsi_Loukia",
       "method": "osl_mahalanobis_full",
       "neighbor_k": 100,
-      "precision": 0.29294,
-      "fit_time_sec": 0.595408677123487,
-      "encode_time_sec": 0.003919547889381647,
-      "query_time_sec": 0.09791113808751106
-    },
-    {
-      "dataset": "cshsi_Loukia",
-      "method": "random_sparse",
-      "neighbor_k": 100,
-      "precision": 0.57594,
-      "fit_time_sec": 0.004393239039927721,
-      "encode_time_sec": 0.0040314411744475365,
-      "query_time_sec": 0.08983124466612935
-    },
-    {
-      "dataset": "cshsi_Loukia",
-      "method": "random_dense",
-      "neighbor_k": 100,
-      "precision": 0.63892,
-      "fit_time_sec": 0.0008497480303049088,
-      "encode_time_sec": 0.004351216834038496,
-      "query_time_sec": 0.09416103828698397
+      "precision": 0.37465,
+      "fit_time_sec": 3.6738021220080554,
+      "encode_time_sec": 0.10156837990507483,
+      "query_time_sec": 0.20230855233967304
     },
     {
       "dataset": "cshsi_paviaC",
       "method": "osl_euclidean",
       "neighbor_k": 100,
-      "precision": 0.3643,
-      "fit_time_sec": 0.4046243308112025,
-      "encode_time_sec": 0.003445765934884548,
-      "query_time_sec": 0.10104439873248339
+      "precision": 0.37881,
+      "fit_time_sec": 1.1014481890015304,
+      "encode_time_sec": 0.0049965400248765945,
+      "query_time_sec": 0.29719433514401317
     },
     {
       "dataset": "cshsi_paviaC",
       "method": "osl_mahalanobis_diag",
       "neighbor_k": 100,
-      "precision": 0.32787,
-      "fit_time_sec": 0.3902333048172295,
-      "encode_time_sec": 0.003804726991802454,
-      "query_time_sec": 0.09495257586240768
+      "precision": 0.41347,
+      "fit_time_sec": 3.5723814186640084,
+      "encode_time_sec": 0.10118083702400327,
+      "query_time_sec": 0.20307453302666545
     },
     {
       "dataset": "cshsi_paviaC",
       "method": "osl_mahalanobis_full",
       "neighbor_k": 100,
-      "precision": 0.38821000000000006,
-      "fit_time_sec": 0.5977139538154006,
-      "encode_time_sec": 0.0034191692247986794,
-      "query_time_sec": 0.09749944787472486
-    },
-    {
-      "dataset": "cshsi_paviaC",
-      "method": "random_sparse",
-      "neighbor_k": 100,
-      "precision": 0.50475,
-      "fit_time_sec": 0.004859583918005228,
-      "encode_time_sec": 0.003795213997364044,
-      "query_time_sec": 0.01741873100399971
-    },
-    {
-      "dataset": "cshsi_paviaC",
-      "method": "random_dense",
-      "neighbor_k": 100,
-      "precision": 0.7316800000000001,
-      "fit_time_sec": 0.0004945471882820129,
-      "encode_time_sec": 0.0036546923220157623,
-      "query_time_sec": 0.015845105051994324
+      "precision": 0.52068,
+      "fit_time_sec": 3.9766486370936036,
+      "encode_time_sec": 0.09936697175726295,
+      "query_time_sec": 0.2070422531105578
     },
     {
       "dataset": "cshsi_paviaU",
       "method": "osl_euclidean",
       "neighbor_k": 100,
-      "precision": 0.27432,
-      "fit_time_sec": 0.4977485816925764,
-      "encode_time_sec": 0.0038200682029128075,
-      "query_time_sec": 0.102318218909204
+      "precision": 0.31729999999999997,
+      "fit_time_sec": 1.6998382839374244,
+      "encode_time_sec": 0.006260477006435394,
+      "query_time_sec": 0.3042399608530104
     },
     {
       "dataset": "cshsi_paviaU",
       "method": "osl_mahalanobis_diag",
       "neighbor_k": 100,
-      "precision": 0.49655000000000005,
-      "fit_time_sec": 0.48631672002375126,
-      "encode_time_sec": 0.00405492540448904,
-      "query_time_sec": 0.10063324775546789
+      "precision": 0.54203,
+      "fit_time_sec": 2.8641816936433315,
+      "encode_time_sec": 0.10018751444295049,
+      "query_time_sec": 0.20682947104796767
     },
     {
       "dataset": "cshsi_paviaU",
       "method": "osl_mahalanobis_full",
       "neighbor_k": 100,
-      "precision": 0.37708,
-      "fit_time_sec": 0.5867070090025663,
-      "encode_time_sec": 0.0041779507882893085,
-      "query_time_sec": 0.10113353515043855
-    },
-    {
-      "dataset": "cshsi_paviaU",
-      "method": "random_sparse",
-      "neighbor_k": 100,
-      "precision": 0.42079999999999995,
-      "fit_time_sec": 0.004685481544584036,
-      "encode_time_sec": 0.003877644892781973,
-      "query_time_sec": 0.08254107600077987
-    },
-    {
-      "dataset": "cshsi_paviaU",
-      "method": "random_dense",
-      "neighbor_k": 100,
-      "precision": 0.74801,
-      "fit_time_sec": 0.0006676469929516315,
-      "encode_time_sec": 0.004121820908039808,
-      "query_time_sec": 0.09147382294759154
+      "precision": 0.66739,
+      "fit_time_sec": 3.469702568370849,
+      "encode_time_sec": 0.10149601474404335,
+      "query_time_sec": 0.2188195027410984
     },
     {
       "dataset": "glove_6b_300d",
       "method": "osl_euclidean",
       "neighbor_k": 100,
-      "precision": 0.19707,
-      "fit_time_sec": 0.5000199470669031,
-      "encode_time_sec": 0.0041048601269721985,
-      "query_time_sec": 0.10102982399985194
+      "precision": 0.29087,
+      "fit_time_sec": 2.8917756332084537,
+      "encode_time_sec": 0.19741841405630112,
+      "query_time_sec": 0.10991390235722065
     },
     {
       "dataset": "glove_6b_300d",
       "method": "osl_mahalanobis_diag",
       "neighbor_k": 100,
-      "precision": 0.24455000000000002,
-      "fit_time_sec": 0.6793801742605865,
-      "encode_time_sec": 0.011588796973228455,
-      "query_time_sec": 0.10349926305934787
+      "precision": 0.40285000000000004,
+      "fit_time_sec": 3.7862647217698395,
+      "encode_time_sec": 0.19575471803545952,
+      "query_time_sec": 0.20167722692713141
     },
     {
       "dataset": "glove_6b_300d",
       "method": "osl_mahalanobis_full",
       "neighbor_k": 100,
-      "precision": 0.18564,
-      "fit_time_sec": 0.8009315738454461,
-      "encode_time_sec": 0.08391829300671816,
-      "query_time_sec": 0.11327740689739585
-    },
-    {
-      "dataset": "glove_6b_300d",
-      "method": "random_sparse",
-      "neighbor_k": 100,
-      "precision": 0.1807,
-      "fit_time_sec": 0.004242381080985069,
-      "encode_time_sec": 0.004384513013064861,
-      "query_time_sec": 0.08019597688689828
-    },
-    {
-      "dataset": "glove_6b_300d",
-      "method": "random_dense",
-      "neighbor_k": 100,
-      "precision": 0.18012999999999998,
-      "fit_time_sec": 0.0012972927652299404,
-      "encode_time_sec": 0.004330148920416832,
-      "query_time_sec": 0.09913191525265574
+      "precision": 0.31715999999999994,
+      "fit_time_sec": 4.383215747307986,
+      "encode_time_sec": 0.19602253567427397,
+      "query_time_sec": 0.2015018300153315
     },
     {
       "dataset": "mars_15d_band4",
       "method": "osl_euclidean",
       "neighbor_k": 50,
-      "precision": 0.2801333333333333,
-      "fit_time_sec": 4.244919659104198,
-      "encode_time_sec": 0.0061617689207196236,
-      "query_time_sec": 0.0020952457562088966
+      "precision": 0.27113333333333334,
+      "fit_time_sec": 13.601339898072183,
+      "encode_time_sec": 0.10114857880398631,
+      "query_time_sec": 0.09636493399739265
     },
     {
       "dataset": "mars_15d_band4",
       "method": "osl_mahalanobis_diag",
       "neighbor_k": 50,
-      "precision": 0.44586666666666663,
-      "fit_time_sec": 4.393662445247173,
-      "encode_time_sec": 0.006559776142239571,
-      "query_time_sec": 0.002173961140215397
+      "precision": 0.45633333333333326,
+      "fit_time_sec": 15.395763163920492,
+      "encode_time_sec": 0.10204140795394778,
+      "query_time_sec": 0.002518582157790661
     },
     {
       "dataset": "mars_15d_band4",
       "method": "osl_mahalanobis_full",
       "neighbor_k": 50,
-      "precision": 0.31446666666666667,
-      "fit_time_sec": 4.379613597877324,
-      "encode_time_sec": 0.00478234002366662,
-      "query_time_sec": 0.0016685421578586102
-    },
-    {
-      "dataset": "mars_15d_band4",
-      "method": "random_sparse",
-      "neighbor_k": 50,
-      "precision": 0.2670666666666667,
-      "fit_time_sec": 0.07216828828677535,
-      "encode_time_sec": 0.0037957699969410896,
-      "query_time_sec": 0.0021722372621297836
-    },
-    {
-      "dataset": "mars_15d_band4",
-      "method": "random_dense",
-      "neighbor_k": 50,
-      "precision": 0.49520000000000003,
-      "fit_time_sec": 0.2281178580597043,
-      "encode_time_sec": 0.004388488829135895,
-      "query_time_sec": 0.0021078791469335556
+      "precision": 0.3304,
+      "fit_time_sec": 15.013426162768155,
+      "encode_time_sec": 0.08609984209761024,
+      "query_time_sec": 0.09606435801833868
     },
     {
       "dataset": "mnist",
       "method": "osl_euclidean",
       "neighbor_k": 100,
-      "precision": 0.52249,
-      "fit_time_sec": 0.6072645839303732,
-      "encode_time_sec": 0.0039476873353123665,
-      "query_time_sec": 0.19251431804150343
+      "precision": 0.4845,
+      "fit_time_sec": 3.394206715747714,
+      "encode_time_sec": 0.09985211910679936,
+      "query_time_sec": 0.20867373887449503
     },
     {
       "dataset": "mnist",
       "method": "osl_mahalanobis_diag",
       "neighbor_k": 100,
-      "precision": 0.52649,
-      "fit_time_sec": 0.8667844929732382,
-      "encode_time_sec": 0.003913449123501778,
-      "query_time_sec": 0.18591693183407187
+      "precision": 0.53342,
+      "fit_time_sec": 6.064667794853449,
+      "encode_time_sec": 0.19186594104394317,
+      "query_time_sec": 0.20770965004339814
     },
     {
       "dataset": "mnist",
       "method": "osl_mahalanobis_full",
       "neighbor_k": 100,
-      "precision": 0.37446,
-      "fit_time_sec": 0.8774175457656384,
-      "encode_time_sec": 0.00438103498890996,
-      "query_time_sec": 0.10286638420075178
-    },
-    {
-      "dataset": "mnist",
-      "method": "random_sparse",
-      "neighbor_k": 100,
-      "precision": 0.42477000000000004,
-      "fit_time_sec": 0.004467206075787544,
-      "encode_time_sec": 0.006644147913902998,
-      "query_time_sec": 0.06970115099102259
-    },
-    {
-      "dataset": "mnist",
-      "method": "random_dense",
-      "neighbor_k": 100,
-      "precision": 0.40831,
-      "fit_time_sec": 0.002852735109627247,
-      "encode_time_sec": 0.00431413110345602,
-      "query_time_sec": 0.07170152897015214
+      "precision": 0.43113999999999997,
+      "fit_time_sec": 7.064240843988955,
+      "encode_time_sec": 0.19380021560937166,
+      "query_time_sec": 0.205100002232939
     },
     {
       "dataset": "sift1m",
       "method": "osl_euclidean",
       "neighbor_k": 100,
-      "precision": 0.56725,
-      "fit_time_sec": 0.49666679091751575,
-      "encode_time_sec": 0.004033796023577452,
-      "query_time_sec": 0.10263308696448803
+      "precision": 0.54576,
+      "fit_time_sec": 2.4015030851587653,
+      "encode_time_sec": 0.1961479540914297,
+      "query_time_sec": 0.20343817304819822
     },
     {
       "dataset": "sift1m",
       "method": "osl_mahalanobis_diag",
       "neighbor_k": 100,
-      "precision": 0.5135,
-      "fit_time_sec": 0.488048252183944,
-      "encode_time_sec": 0.0038458202034235,
-      "query_time_sec": 0.10319960117340088
+      "precision": 0.47734000000000004,
+      "fit_time_sec": 3.080469889100641,
+      "encode_time_sec": 0.1958822188898921,
+      "query_time_sec": 0.10538790095597506
     },
     {
       "dataset": "sift1m",
       "method": "osl_mahalanobis_full",
       "neighbor_k": 100,
-      "precision": 0.48432000000000003,
-      "fit_time_sec": 0.4896804806776345,
-      "encode_time_sec": 0.0040267580188810825,
-      "query_time_sec": 0.11149269808083773
-    },
-    {
-      "dataset": "sift1m",
-      "method": "random_sparse",
-      "neighbor_k": 100,
-      "precision": 0.48273,
-      "fit_time_sec": 0.004163964185863733,
-      "encode_time_sec": 0.00408589281141758,
-      "query_time_sec": 0.08063347823917866
-    },
-    {
-      "dataset": "sift1m",
-      "method": "random_dense",
-      "neighbor_k": 100,
-      "precision": 0.46896000000000004,
-      "fit_time_sec": 0.0005837706848978996,
-      "encode_time_sec": 0.0037077157758176327,
-      "query_time_sec": 0.016743200831115246
+      "precision": 0.5030800000000001,
+      "fit_time_sec": 3.484707659110427,
+      "encode_time_sec": 0.1013115318492055,
+      "query_time_sec": 0.21247737016528845
     }
   ]
 }

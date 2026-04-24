@@ -1,50 +1,94 @@
 {
   "dataset": "cshsi_paviaC",
+  "config": {
+    "num_train": 300,
+    "num_eval": 1000,
+    "neighbor_k": 100,
+    "output_dim": 320,
+    "hash_length": 8,
+    "row_active": 8,
+    "y_iters": 20,
+    "w_iters": 40,
+    "covariance_reg": 0.01
+  },
+  "shared_osl_config": {
+    "output_dim": 320,
+    "hash_length": 8,
+    "row_active": 8,
+    "y_iters": 20,
+    "w_iters": 40,
+    "covariance_reg": 0.01,
+    "seed": 0
+  },
+  "selection": {
+    "tuned_method": "osl_mahalanobis_full",
+    "selection_datasets": [
+      "cshsi_paviaU",
+      "cshsi_Houston18",
+      "mars_15d_band4"
+    ],
+    "selection_rule": "maximize mean_precision + mean_same_label_precision"
+  },
+  "num_samples": 783640,
+  "input_dim": 102,
+  "num_labeled_eval": 47,
   "methods": [
     {
       "method": "osl_euclidean",
+      "operator_metric": "euclidean",
+      "fit_time_sec": 1.1014481890015304,
+      "encode_time_sec": 0.0049965400248765945,
+      "query_time_sec": 0.29719433514401317,
+      "fit_summary": {
+        "operator_metric": "euclidean",
+        "y_similarity_error": 4.282716642699775,
+        "w_euclidean_error": 0.49240763346354166,
+        "w_weighted_error": 0.49240763346354166,
+        "covariance_reg": 0.01,
+        "covariance_trace": 0.0,
+        "precision_trace": 0.0
+      },
       "neighbor_k": 100,
-      "precision": 0.3643,
-      "same_label_precision": 0.029574468085106387,
-      "fit_time_sec": 0.4046243308112025,
-      "encode_time_sec": 0.003445765934884548,
-      "query_time_sec": 0.10104439873248339
+      "precision_at_100": 0.37881,
+      "same_label_precision_at_100": 0.025744680851063833
     },
     {
       "method": "osl_mahalanobis_diag",
+      "operator_metric": "mahalanobis_diag",
+      "fit_time_sec": 3.5723814186640084,
+      "encode_time_sec": 0.10118083702400327,
+      "query_time_sec": 0.20307453302666545,
+      "fit_summary": {
+        "operator_metric": "mahalanobis_diag",
+        "y_similarity_error": 4.282716642699775,
+        "w_euclidean_error": 0.13688140869140625,
+        "w_weighted_error": 71.541953125,
+        "covariance_reg": 0.01,
+        "covariance_trace": 9.401182174682617,
+        "precision_trace": 24392.65625
+      },
       "neighbor_k": 100,
-      "precision": 0.32787,
-      "same_label_precision": 0.023617021276595748,
-      "fit_time_sec": 0.3902333048172295,
-      "encode_time_sec": 0.003804726991802454,
-      "query_time_sec": 0.09495257586240768
+      "precision_at_100": 0.41347,
+      "same_label_precision_at_100": 0.027872340425531918
     },
     {
       "method": "osl_mahalanobis_full",
+      "operator_metric": "mahalanobis_full",
+      "fit_time_sec": 3.9766486370936036,
+      "encode_time_sec": 0.09936697175726295,
+      "query_time_sec": 0.2070422531105578,
+      "fit_summary": {
+        "operator_metric": "mahalanobis_full",
+        "y_similarity_error": 4.282716642699775,
+        "w_euclidean_error": 0.15122889200846354,
+        "w_weighted_error": 119.2809375,
+        "covariance_reg": 0.01,
+        "covariance_trace": 9.401182174682617,
+        "precision_trace": 26634.265625
+      },
       "neighbor_k": 100,
-      "precision": 0.38821000000000006,
-      "same_label_precision": 0.027446808510638302,
-      "fit_time_sec": 0.5977139538154006,
-      "encode_time_sec": 0.0034191692247986794,
-      "query_time_sec": 0.09749944787472486
-    },
-    {
-      "method": "random_dense",
-      "neighbor_k": 100,
-      "precision": 0.7316800000000001,
-      "same_label_precision": 0.04957446808510638,
-      "fit_time_sec": 0.0004945471882820129,
-      "encode_time_sec": 0.0036546923220157623,
-      "query_time_sec": 0.015845105051994324
-    },
-    {
-      "method": "random_sparse",
-      "neighbor_k": 100,
-      "precision": 0.50475,
-      "same_label_precision": 0.03787234042553193,
-      "fit_time_sec": 0.004859583918005228,
-      "encode_time_sec": 0.003795213997364044,
-      "query_time_sec": 0.01741873100399971
+      "precision_at_100": 0.52068,
+      "same_label_precision_at_100": 0.03702127659574469
     }
   ]
 }
