@@ -1,0 +1,50 @@
+{
+  "dataset": "mars_15d_band4",
+  "methods": [
+    {
+      "method": "osl_euclidean",
+      "neighbor_k": 50,
+      "precision": 0.2801333333333333,
+      "same_label_precision": null,
+      "fit_time_sec": 4.244919659104198,
+      "encode_time_sec": 0.0061617689207196236,
+      "query_time_sec": 0.0020952457562088966
+    },
+    {
+      "method": "osl_mahalanobis_diag",
+      "neighbor_k": 50,
+      "precision": 0.44586666666666663,
+      "same_label_precision": null,
+      "fit_time_sec": 4.393662445247173,
+      "encode_time_sec": 0.006559776142239571,
+      "query_time_sec": 0.002173961140215397
+    },
+    {
+      "method": "osl_mahalanobis_full",
+      "neighbor_k": 50,
+      "precision": 0.31446666666666667,
+      "same_label_precision": null,
+      "fit_time_sec": 4.379613597877324,
+      "encode_time_sec": 0.00478234002366662,
+      "query_time_sec": 0.0016685421578586102
+    },
+    {
+      "method": "random_dense",
+      "neighbor_k": 50,
+      "precision": 0.49520000000000003,
+      "same_label_precision": null,
+      "fit_time_sec": 0.2281178580597043,
+      "encode_time_sec": 0.004388488829135895,
+      "query_time_sec": 0.0021078791469335556
+    },
+    {
+      "method": "random_sparse",
+      "neighbor_k": 50,
+      "precision": 0.2670666666666667,
+      "same_label_precision": null,
+      "fit_time_sec": 0.07216828828677535,
+      "encode_time_sec": 0.0037957699969410896,
+      "query_time_sec": 0.0021722372621297836
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "dataset": "glove_6b_300d",
+  "methods": [
+    {
+      "method": "osl_euclidean",
+      "neighbor_k": 100,
+      "precision": 0.19707,
+      "same_label_precision": null,
+      "fit_time_sec": 0.5000199470669031,
+      "encode_time_sec": 0.0041048601269721985,
+      "query_time_sec": 0.10102982399985194
+    },
+    {
+      "method": "osl_mahalanobis_diag",
+      "neighbor_k": 100,
+      "precision": 0.24455000000000002,
+      "same_label_precision": null,
+      "fit_time_sec": 0.6793801742605865,
+      "encode_time_sec": 0.011588796973228455,
+      "query_time_sec": 0.10349926305934787
+    },
+    {
+      "method": "osl_mahalanobis_full",
+      "neighbor_k": 100,
+      "precision": 0.18564,
+      "same_label_precision": null,
+      "fit_time_sec": 0.8009315738454461,
+      "encode_time_sec": 0.08391829300671816,
+      "query_time_sec": 0.11327740689739585
+    },
+    {
+      "method": "random_dense",
+      "neighbor_k": 100,
+      "precision": 0.18012999999999998,
+      "same_label_precision": null,
+      "fit_time_sec": 0.0012972927652299404,
+      "encode_time_sec": 0.004330148920416832,
+      "query_time_sec": 0.09913191525265574
+    },
+    {
+      "method": "random_sparse",
+      "neighbor_k": 100,
+      "precision": 0.1807,
+      "same_label_precision": null,
+      "fit_time_sec": 0.004242381080985069,
+      "encode_time_sec": 0.004384513013064861,
+      "query_time_sec": 0.08019597688689828
+    }
+  ]
+}

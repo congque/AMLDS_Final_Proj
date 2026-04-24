@@ -1,0 +1,475 @@
+{
+  "experiment": "final_all_dataset_results",
+  "datasets": {
+    "cshsi_Dioni": [
+      {
+        "method": "osl_euclidean",
+        "neighbor_k": 100,
+        "precision": 0.21912,
+        "same_label_precision": 0.013928571428571427,
+        "fit_time_sec": 0.6003996613435447,
+        "encode_time_sec": 0.0037066200748085976,
+        "query_time_sec": 0.10039232904091477
+      },
+      {
+        "method": "osl_mahalanobis_diag",
+        "neighbor_k": 100,
+        "precision": 0.29595,
+        "same_label_precision": 0.019285714285714288,
+        "fit_time_sec": 0.4864151398651302,
+        "encode_time_sec": 0.004032727796584368,
+        "query_time_sec": 0.10116478987038136
+      },
+      {
+        "method": "osl_mahalanobis_full",
+        "neighbor_k": 100,
+        "precision": 0.27695,
+        "same_label_precision": 0.013928571428571429,
+        "fit_time_sec": 0.4936698800884187,
+        "encode_time_sec": 0.0035223951563239098,
+        "query_time_sec": 0.09543002722784877
+      },
+      {
+        "method": "random_dense",
+        "neighbor_k": 100,
+        "precision": 0.68232,
+        "same_label_precision": 0.028214285714285716,
+        "fit_time_sec": 0.0008833268657326698,
+        "encode_time_sec": 0.004050498362630606,
+        "query_time_sec": 0.09734735218808055
+      },
+      {
+        "method": "random_sparse",
+        "neighbor_k": 100,
+        "precision": 0.57371,
+        "same_label_precision": 0.022500000000000003,
+        "fit_time_sec": 0.00423520989716053,
+        "encode_time_sec": 0.004055425990372896,
+        "query_time_sec": 0.08785738190636039
+      }
+    ],
+    "cshsi_Houston13": [
+      {
+        "method": "osl_euclidean",
+        "neighbor_k": 100,
+        "precision": 0.2421,
+        "same_label_precision": 0.00736842105263158,
+        "fit_time_sec": 0.4071681280620396,
+        "encode_time_sec": 0.0020758258178830147,
+        "query_time_sec": 0.09626056300476193
+      },
+      {
+        "method": "osl_mahalanobis_diag",
+        "neighbor_k": 100,
+        "precision": 0.57759,
+        "same_label_precision": 0.00736842105263158,
+        "fit_time_sec": 0.5898575838655233,
+        "encode_time_sec": 0.003255068324506283,
+        "query_time_sec": 0.09747950406745076
+      },
+      {
+        "method": "osl_mahalanobis_full",
+        "neighbor_k": 100,
+        "precision": 0.5599200000000001,
+        "same_label_precision": 0.009473684210526315,
+        "fit_time_sec": 0.498673876747489,
+        "encode_time_sec": 0.0032949410378932953,
+        "query_time_sec": 0.10328629286959767
+      },
+      {
+        "method": "random_dense",
+        "neighbor_k": 100,
+        "precision": 0.74997,
+        "same_label_precision": 0.011578947368421055,
+        "fit_time_sec": 0.0003316197544336319,
+        "encode_time_sec": 0.003994397819042206,
+        "query_time_sec": 0.09216270688921213
+      },
+      {
+        "method": "random_sparse",
+        "neighbor_k": 100,
+        "precision": 0.57988,
+        "same_label_precision": 0.006842105263157895,
+        "fit_time_sec": 0.003864775877445936,
+        "encode_time_sec": 0.004765530116856098,
+        "query_time_sec": 0.0764700579456985
+      }
+    ],
+    "cshsi_Houston18": [
+      {
+        "method": "osl_euclidean",
+        "neighbor_k": 100,
+        "precision": 0.20348000000000002,
+        "same_label_precision": 0.16385964912280704,
+        "fit_time_sec": 0.4923544027842581,
+        "encode_time_sec": 0.00217025401070714,
+        "query_time_sec": 0.01221067039296031
+      },
+      {
+        "method": "osl_mahalanobis_diag",
+        "neighbor_k": 100,
+        "precision": 0.55896,
+        "same_label_precision": 0.1889122807017544,
+        "fit_time_sec": 0.500792439095676,
+        "encode_time_sec": 0.0033523431047797203,
+        "query_time_sec": 0.09944743802770972
+      },
+      {
+        "method": "osl_mahalanobis_full",
+        "neighbor_k": 100,
+        "precision": 0.6464500000000001,
+        "same_label_precision": 0.22557894736842102,
+        "fit_time_sec": 0.5005889530293643,
+        "encode_time_sec": 0.0879282159730792,
+        "query_time_sec": 0.10001395782455802
+      },
+      {
+        "method": "random_dense",
+        "neighbor_k": 100,
+        "precision": 0.7230899999999999,
+        "same_label_precision": 0.22242105263157894,
+        "fit_time_sec": 0.0003600679337978363,
+        "encode_time_sec": 0.0046359580010175705,
+        "query_time_sec": 0.09298214595764875
+      },
+      {
+        "method": "random_sparse",
+        "neighbor_k": 100,
+        "precision": 0.6093999999999999,
+        "same_label_precision": 0.21575438596491225,
+        "fit_time_sec": 0.004262529779225588,
+        "encode_time_sec": 0.004060252103954554,
+        "query_time_sec": 0.08776389807462692
+      }
+    ],
+    "cshsi_Loukia": [
+      {
+        "method": "osl_euclidean",
+        "neighbor_k": 100,
+        "precision": 0.37465000000000004,
+        "same_label_precision": 0.012045454545454547,
+        "fit_time_sec": 0.597968780901283,
+        "encode_time_sec": 0.0032621067948639393,
+        "query_time_sec": 0.10051358444616199
+      },
+      {
+        "method": "osl_mahalanobis_diag",
+        "neighbor_k": 100,
+        "precision": 0.29039,
+        "same_label_precision": 0.014772727272727276,
+        "fit_time_sec": 0.6035026200115681,
+        "encode_time_sec": 0.08749537076801062,
+        "query_time_sec": 0.012840037234127522
+      },
+      {
+        "method": "osl_mahalanobis_full",
+        "neighbor_k": 100,
+        "precision": 0.29294,
+        "same_label_precision": 0.015454545454545455,
+        "fit_time_sec": 0.595408677123487,
+        "encode_time_sec": 0.003919547889381647,
+        "query_time_sec": 0.09791113808751106
+      },
+      {
+        "method": "random_dense",
+        "neighbor_k": 100,
+        "precision": 0.63892,
+        "same_label_precision": 0.022727272727272728,
+        "fit_time_sec": 0.0008497480303049088,
+        "encode_time_sec": 0.004351216834038496,
+        "query_time_sec": 0.09416103828698397
+      },
+      {
+        "method": "random_sparse",
+        "neighbor_k": 100,
+        "precision": 0.57594,
+        "same_label_precision": 0.022272727272727274,
+        "fit_time_sec": 0.004393239039927721,
+        "encode_time_sec": 0.0040314411744475365,
+        "query_time_sec": 0.08983124466612935
+      }
+    ],
+    "cshsi_paviaC": [
+      {
+        "method": "osl_euclidean",
+        "neighbor_k": 100,
+        "precision": 0.3643,
+        "same_label_precision": 0.029574468085106387,
+        "fit_time_sec": 0.4046243308112025,
+        "encode_time_sec": 0.003445765934884548,
+        "query_time_sec": 0.10104439873248339
+      },
+      {
+        "method": "osl_mahalanobis_diag",
+        "neighbor_k": 100,
+        "precision": 0.32787,
+        "same_label_precision": 0.023617021276595748,
+        "fit_time_sec": 0.3902333048172295,
+        "encode_time_sec": 0.003804726991802454,
+        "query_time_sec": 0.09495257586240768
+      },
+      {
+        "method": "osl_mahalanobis_full",
+        "neighbor_k": 100,
+        "precision": 0.38821000000000006,
+        "same_label_precision": 0.027446808510638302,
+        "fit_time_sec": 0.5977139538154006,
+        "encode_time_sec": 0.0034191692247986794,
+        "query_time_sec": 0.09749944787472486
+      },
+      {
+        "method": "random_dense",
+        "neighbor_k": 100,
+        "precision": 0.7316800000000001,
+        "same_label_precision": 0.04957446808510638,
+        "fit_time_sec": 0.0004945471882820129,
+        "encode_time_sec": 0.0036546923220157623,
+        "query_time_sec": 0.015845105051994324
+      },
+      {
+        "method": "random_sparse",
+        "neighbor_k": 100,
+        "precision": 0.50475,
+        "same_label_precision": 0.03787234042553193,
+        "fit_time_sec": 0.004859583918005228,
+        "encode_time_sec": 0.003795213997364044,
+        "query_time_sec": 0.01741873100399971
+      }
+    ],
+    "cshsi_paviaU": [
+      {
+        "method": "osl_euclidean",
+        "neighbor_k": 100,
+        "precision": 0.27432,
+        "same_label_precision": 0.10910526315789476,
+        "fit_time_sec": 0.4977485816925764,
+        "encode_time_sec": 0.0038200682029128075,
+        "query_time_sec": 0.102318218909204
+      },
+      {
+        "method": "osl_mahalanobis_diag",
+        "neighbor_k": 100,
+        "precision": 0.49655000000000005,
+        "same_label_precision": 0.13868421052631583,
+        "fit_time_sec": 0.48631672002375126,
+        "encode_time_sec": 0.00405492540448904,
+        "query_time_sec": 0.10063324775546789
+      },
+      {
+        "method": "osl_mahalanobis_full",
+        "neighbor_k": 100,
+        "precision": 0.37708,
+        "same_label_precision": 0.10552631578947369,
+        "fit_time_sec": 0.5867070090025663,
+        "encode_time_sec": 0.0041779507882893085,
+        "query_time_sec": 0.10113353515043855
+      },
+      {
+        "method": "random_dense",
+        "neighbor_k": 100,
+        "precision": 0.74801,
+        "same_label_precision": 0.14105263157894735,
+        "fit_time_sec": 0.0006676469929516315,
+        "encode_time_sec": 0.004121820908039808,
+        "query_time_sec": 0.09147382294759154
+      },
+      {
+        "method": "random_sparse",
+        "neighbor_k": 100,
+        "precision": 0.42079999999999995,
+        "same_label_precision": 0.15042105263157898,
+        "fit_time_sec": 0.004685481544584036,
+        "encode_time_sec": 0.003877644892781973,
+        "query_time_sec": 0.08254107600077987
+      }
+    ],
+    "glove_6b_300d": [
+      {
+        "method": "osl_euclidean",
+        "neighbor_k": 100,
+        "precision": 0.19707,
+        "same_label_precision": null,
+        "fit_time_sec": 0.5000199470669031,
+        "encode_time_sec": 0.0041048601269721985,
+        "query_time_sec": 0.10102982399985194
+      },
+      {
+        "method": "osl_mahalanobis_diag",
+        "neighbor_k": 100,
+        "precision": 0.24455000000000002,
+        "same_label_precision": null,
+        "fit_time_sec": 0.6793801742605865,
+        "encode_time_sec": 0.011588796973228455,
+        "query_time_sec": 0.10349926305934787
+      },
+      {
+        "method": "osl_mahalanobis_full",
+        "neighbor_k": 100,
+        "precision": 0.18564,
+        "same_label_precision": null,
+        "fit_time_sec": 0.8009315738454461,
+        "encode_time_sec": 0.08391829300671816,
+        "query_time_sec": 0.11327740689739585
+      },
+      {
+        "method": "random_dense",
+        "neighbor_k": 100,
+        "precision": 0.18012999999999998,
+        "same_label_precision": null,
+        "fit_time_sec": 0.0012972927652299404,
+        "encode_time_sec": 0.004330148920416832,
+        "query_time_sec": 0.09913191525265574
+      },
+      {
+        "method": "random_sparse",
+        "neighbor_k": 100,
+        "precision": 0.1807,
+        "same_label_precision": null,
+        "fit_time_sec": 0.004242381080985069,
+        "encode_time_sec": 0.004384513013064861,
+        "query_time_sec": 0.08019597688689828
+      }
+    ],
+    "mars_15d_band4": [
+      {
+        "method": "osl_euclidean",
+        "neighbor_k": 50,
+        "precision": 0.2801333333333333,
+        "same_label_precision": null,
+        "fit_time_sec": 4.244919659104198,
+        "encode_time_sec": 0.0061617689207196236,
+        "query_time_sec": 0.0020952457562088966
+      },
+      {
+        "method": "osl_mahalanobis_diag",
+        "neighbor_k": 50,
+        "precision": 0.44586666666666663,
+        "same_label_precision": null,
+        "fit_time_sec": 4.393662445247173,
+        "encode_time_sec": 0.006559776142239571,
+        "query_time_sec": 0.002173961140215397
+      },
+      {
+        "method": "osl_mahalanobis_full",
+        "neighbor_k": 50,
+        "precision": 0.31446666666666667,
+        "same_label_precision": null,
+        "fit_time_sec": 4.379613597877324,
+        "encode_time_sec": 0.00478234002366662,
+        "query_time_sec": 0.0016685421578586102
+      },
+      {
+        "method": "random_dense",
+        "neighbor_k": 50,
+        "precision": 0.49520000000000003,
+        "same_label_precision": null,
+        "fit_time_sec": 0.2281178580597043,
+        "encode_time_sec": 0.004388488829135895,
+        "query_time_sec": 0.0021078791469335556
+      },
+      {
+        "method": "random_sparse",
+        "neighbor_k": 50,
+        "precision": 0.2670666666666667,
+        "same_label_precision": null,
+        "fit_time_sec": 0.07216828828677535,
+        "encode_time_sec": 0.0037957699969410896,
+        "query_time_sec": 0.0021722372621297836
+      }
+    ],
+    "mnist": [
+      {
+        "method": "osl_euclidean",
+        "neighbor_k": 100,
+        "precision": 0.52249,
+        "same_label_precision": 0.36172000000000004,
+        "fit_time_sec": 0.6072645839303732,
+        "encode_time_sec": 0.0039476873353123665,
+        "query_time_sec": 0.19251431804150343
+      },
+      {
+        "method": "osl_mahalanobis_diag",
+        "neighbor_k": 100,
+        "precision": 0.52649,
+        "same_label_precision": 0.34023000000000003,
+        "fit_time_sec": 0.8667844929732382,
+        "encode_time_sec": 0.003913449123501778,
+        "query_time_sec": 0.18591693183407187
+      },
+      {
+        "method": "osl_mahalanobis_full",
+        "neighbor_k": 100,
+        "precision": 0.37446,
+        "same_label_precision": 0.29489,
+        "fit_time_sec": 0.8774175457656384,
+        "encode_time_sec": 0.00438103498890996,
+        "query_time_sec": 0.10286638420075178
+      },
+      {
+        "method": "random_dense",
+        "neighbor_k": 100,
+        "precision": 0.40831,
+        "same_label_precision": 0.28878000000000004,
+        "fit_time_sec": 0.002852735109627247,
+        "encode_time_sec": 0.00431413110345602,
+        "query_time_sec": 0.07170152897015214
+      },
+      {
+        "method": "random_sparse",
+        "neighbor_k": 100,
+        "precision": 0.42477000000000004,
+        "same_label_precision": 0.29125999999999996,
+        "fit_time_sec": 0.004467206075787544,
+        "encode_time_sec": 0.006644147913902998,
+        "query_time_sec": 0.06970115099102259
+      }
+    ],
+    "sift1m": [
+      {
+        "method": "osl_euclidean",
+        "neighbor_k": 100,
+        "precision": 0.56725,
+        "same_label_precision": null,
+        "fit_time_sec": 0.49666679091751575,
+        "encode_time_sec": 0.004033796023577452,
+        "query_time_sec": 0.10263308696448803
+      },
+      {
+        "method": "osl_mahalanobis_diag",
+        "neighbor_k": 100,
+        "precision": 0.5135,
+        "same_label_precision": null,
+        "fit_time_sec": 0.488048252183944,
+        "encode_time_sec": 0.0038458202034235,
+        "query_time_sec": 0.10319960117340088
+      },
+      {
+        "method": "osl_mahalanobis_full",
+        "neighbor_k": 100,
+        "precision": 0.48432000000000003,
+        "same_label_precision": null,
+        "fit_time_sec": 0.4896804806776345,
+        "encode_time_sec": 0.0040267580188810825,
+        "query_time_sec": 0.11149269808083773
+      },
+      {
+        "method": "random_dense",
+        "neighbor_k": 100,
+        "precision": 0.46896000000000004,
+        "same_label_precision": null,
+        "fit_time_sec": 0.0005837706848978996,
+        "encode_time_sec": 0.0037077157758176327,
+        "query_time_sec": 0.016743200831115246
+      },
+      {
+        "method": "random_sparse",
+        "neighbor_k": 100,
+        "precision": 0.48273,
+        "same_label_precision": null,
+        "fit_time_sec": 0.004163964185863733,
+        "encode_time_sec": 0.00408589281141758,
+        "query_time_sec": 0.08063347823917866
+      }
+    ]
+  }
+}

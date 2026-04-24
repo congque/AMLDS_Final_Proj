@@ -1,0 +1,50 @@
+{
+  "dataset": "cshsi_paviaU",
+  "methods": [
+    {
+      "method": "osl_euclidean",
+      "neighbor_k": 100,
+      "precision": 0.27432,
+      "same_label_precision": 0.10910526315789476,
+      "fit_time_sec": 0.4977485816925764,
+      "encode_time_sec": 0.0038200682029128075,
+      "query_time_sec": 0.102318218909204
+    },
+    {
+      "method": "osl_mahalanobis_diag",
+      "neighbor_k": 100,
+      "precision": 0.49655000000000005,
+      "same_label_precision": 0.13868421052631583,
+      "fit_time_sec": 0.48631672002375126,
+      "encode_time_sec": 0.00405492540448904,
+      "query_time_sec": 0.10063324775546789
+    },
+    {
+      "method": "osl_mahalanobis_full",
+      "neighbor_k": 100,
+      "precision": 0.37708,
+      "same_label_precision": 0.10552631578947369,
+      "fit_time_sec": 0.5867070090025663,
+      "encode_time_sec": 0.0041779507882893085,
+      "query_time_sec": 0.10113353515043855
+    },
+    {
+      "method": "random_dense",
+      "neighbor_k": 100,
+      "precision": 0.74801,
+      "same_label_precision": 0.14105263157894735,
+      "fit_time_sec": 0.0006676469929516315,
+      "encode_time_sec": 0.004121820908039808,
+      "query_time_sec": 0.09147382294759154
+    },
+    {
+      "method": "random_sparse",
+      "neighbor_k": 100,
+      "precision": 0.42079999999999995,
+      "same_label_precision": 0.15042105263157898,
+      "fit_time_sec": 0.004685481544584036,
+      "encode_time_sec": 0.003877644892781973,
+      "query_time_sec": 0.08254107600077987
+    }
+  ]
+}

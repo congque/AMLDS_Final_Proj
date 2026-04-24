@@ -1,0 +1,50 @@
+{
+  "dataset": "cshsi_Houston18",
+  "methods": [
+    {
+      "method": "osl_euclidean",
+      "neighbor_k": 100,
+      "precision": 0.20348000000000002,
+      "same_label_precision": 0.16385964912280704,
+      "fit_time_sec": 0.4923544027842581,
+      "encode_time_sec": 0.00217025401070714,
+      "query_time_sec": 0.01221067039296031
+    },
+    {
+      "method": "osl_mahalanobis_diag",
+      "neighbor_k": 100,
+      "precision": 0.55896,
+      "same_label_precision": 0.1889122807017544,
+      "fit_time_sec": 0.500792439095676,
+      "encode_time_sec": 0.0033523431047797203,
+      "query_time_sec": 0.09944743802770972
+    },
+    {
+      "method": "osl_mahalanobis_full",
+      "neighbor_k": 100,
+      "precision": 0.6464500000000001,
+      "same_label_precision": 0.22557894736842102,
+      "fit_time_sec": 0.5005889530293643,
+      "encode_time_sec": 0.0879282159730792,
+      "query_time_sec": 0.10001395782455802
+    },
+    {
+      "method": "random_dense",
+      "neighbor_k": 100,
+      "precision": 0.7230899999999999,
+      "same_label_precision": 0.22242105263157894,
+      "fit_time_sec": 0.0003600679337978363,
+      "encode_time_sec": 0.0046359580010175705,
+      "query_time_sec": 0.09298214595764875
+    },
+    {
+      "method": "random_sparse",
+      "neighbor_k": 100,
+      "precision": 0.6093999999999999,
+      "same_label_precision": 0.21575438596491225,
+      "fit_time_sec": 0.004262529779225588,
+      "encode_time_sec": 0.004060252103954554,
+      "query_time_sec": 0.08776389807462692
+    }
+  ]
+}
